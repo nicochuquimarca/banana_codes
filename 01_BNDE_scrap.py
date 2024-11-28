@@ -60,10 +60,85 @@ def get_bnde_df(num_pages):
         data = pd.concat([data, df], ignore_index=True)
     # 4. Return the final DataFrame
     return data
+# Fn03: get_single_issuee_bnde_df = Get the BNDE's newspaper, date and headlines for an individual newspaper issue
+def get_single_issue_bnde_df(id):
+    # 0. Call the web page
+    url = "https://repositorio.bne.gob.ec/xmlui/handle/34000/" + id
+    response = requests.get(url)                          # Send a GET request to the web page
+    soup = BeautifulSoup(response.content, 'html.parser') # Parse the HTML content of the page
+    meta_tags = soup.find_all('meta') # Find all meta tags
+    # 1. Extract specific meta tags
+    abstract    = None
+    newspaper   = None
+    date        = None
+    # 3. Get the information in vectors
+    for tag in meta_tags:
+        if tag.get('name') == 'DCTERMS.abstract':
+            abstract = tag.get('content')
+        elif tag.get('name') == 'DC.title':
+            newspaper = tag.get('content')
+        elif tag.get('name') == 'citation_date':
+            date = tag.get('content')
+    # 4. Split the abstract string into a list of headlines
+    headlines = abstract.split(" -- ")
+    # 5. Create a DataFrame with url, newspaper, date, and headlines
+    data = {
+        'id'       : [id01]      * len(headlines),
+        'newspaper': [newspaper] * len(headlines),
+        'date'     : [date]      * len(headlines),
+        'headline' : headlines,
+        'url'      : [url]       * len(headlines),
+    }
+    # 6. Return the DataFrame
+    df = pd.DataFrame(data)
+    return df
 
-# 3. Call functions
+
+# 3. Get a list of all the newspaper articles under a certain search criteria
 num_pages = 14 # Ex-ante number of pages (known after a manual inspection)
-data = get_bnde_df(num_pages = num_pages) # Get the newspaper data
+art_data = get_bnde_df(num_pages = num_pages) # Get the newspaper data
+file_path = wd_path + "\\data\\raw\\bnde_newspapers.csv" # Define the file path
+# art_data.to_csv(file_path, index = False) # Save the data in a csv file
 
-# 4. Save the data
-# data.to_csv("data\\raw\\bnde_newspapers.csv", index = False) # Save the data in a csv file
+
+
+# 4. Get the complete headlines in order to perform keyword filtering
+df = pd.read_csv(file_path) # Read the csv file
+df['issue_id'] = df['id'].astype(str).str[-5:] # Get the issue id
+issue_id = df['issue_id']
+
+
+# Create a single dataframe with all the headlines
+data = pd.DataFrame()
+# Iterate over all the issues ids
+for id in issue_id:
+    id_text = str(id)
+    df = get_single_issue_bnde_df(id = id_text)
+    data = pd.concat([data, df], ignore_index=True)
+
+data.columns
+
+
+# Filter the newspapers articles based on keywords
+keywords = ['Plátano', 'plátano', 'Autopista','autopista','Camino','Carretera',
+            'carretera','puerto','Puerto','infraestructura','Infraestructura',
+            'Cacao','cacao','Banano','banano','Aeropuerto','aeropuerto',
+            'Tren','tren','Vía','vía','Vias','vias','Vialidad','vialidad',
+            'Ferrocarril','ferrocarril','Transporte','transporte','Obras','obras',
+            'Construcción','construcción','Construccion','construccion',
+            'carretero','Carretero','puente','Puente','locomotora','Locomotora']
+
+# Filter the DataFrame
+filtered_df = data[data['headline'].str.contains('|'.join(keywords), case=False, na=False)]
+
+
+filtered_df
+
+fpath = wd_path + "\\data\\raw\\bnde_newspapers_filtered.xlsx"
+filtered_df.to_excel(fpath, index=False)
+
+
+
+# Ssave the raw thing as an excel
+fpath = wd_path + "\\data\\raw\\bnde_newspapers.xlsx"
+data.to_excel(fpath, index=False)
