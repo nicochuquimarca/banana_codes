@@ -181,7 +181,7 @@ di "End of DESCRIPTIVE ANALYSIS"
 			lcolor(red)) /// Fitted Values
 		   (scatter road_res roads_km if region == 1, ///
 		   	msymbol(circle) msize(small) mcolor(blue%40) ///
-			mlabel(canton) mlabsize(tiny)), /// Scatter Plot
+			mlabel(canton) mlabsize(small)), /// Scatter Plot
 	title("Sample: All Cantons in the Costa Region", size(medium)) /// 
 	ytitle("Residuals of Output: Thousand of Banana Bunches")        ///
 	ylabel(-4000(1000)3000, angle(h) format(%10.0fc)) xlabel(0(25)150) ///
@@ -208,7 +208,7 @@ di "End of DESCRIPTIVE ANALYSIS"
 			lcolor(red)) /// Fitted Values
 		   (scatter l_road_res l_roads_km if region == 1, ///
 		   	msymbol(circle) msize(small) mcolor(blue%40) ///
-			mlabel(canton) mlabsize(tiny)), /// Scatter Plot
+			mlabel(canton) mlabsize(small)), /// Scatter Plot
 	title("Sample: Log(Roads) and Log(Output) in the Costa Region", size(medium)) /// 
 	ytitle("Residuals of Log(Output)") ///
 	ylabel(-5(1)3, angle(h) format(%10.0fc)) xlabel(0(1)6) ///
@@ -231,7 +231,7 @@ di "End of DESCRIPTIVE ANALYSIS"
 			lcolor(red)) /// Fitted Values
 		   (scatter water_res water_dist_mean if region == 1, ///
 		   	msymbol(circle) msize(small) mcolor(blue%40) ///
-			mlabel(canton) mlabsize(tiny)), /// Scatter Plot
+			mlabel(canton) mlabsize(small)), /// Scatter Plot
 	title("Sample: All Cantons in the Costa Region", size(medium)) /// 
 	ytitle("Residuals of Banana Plantations") ///
 	ylabel(-1000(500)2000, angle(h) format(%10.0fc)) xlabel(0(20)120) ///
@@ -241,7 +241,7 @@ di "End of DESCRIPTIVE ANALYSIS"
 	}
 	**** Figure 3: Distance to Rivers and Plantations	
 	
-	**** Figure 4: Distance to Rivers and Plantations
+	**** Figure 4: Log(Distance to Rivers and Plantations)
 	{
 	* Prepare data for the plot
 	global plot_lcovs c_to_port l_roads_km rain_mean
@@ -254,7 +254,7 @@ di "End of DESCRIPTIVE ANALYSIS"
 			lcolor(red)) /// Fitted Values
 		   (scatter l_water_res l_water_dist_mean if region == 1, ///
 		   	msymbol(circle) msize(small) mcolor(blue%40) ///
-			mlabel(canton) mlabsize(tiny)), /// Scatter Plot
+			mlabel(canton) mlabsize(small)), /// Scatter Plot
 	title("Sample: Log(Distance) and Log(Plantations) in the Costa Region", size(medium)) /// 
 	ytitle("Residuals of Log(Banana Plantations)") ///
 	ylabel(-2(0.5)2, angle(h) format(%10.0fc)) xlabel(1(1)5) ///
@@ -262,6 +262,6 @@ di "End of DESCRIPTIVE ANALYSIS"
 	graph export "results\figures\l_water_vs_explotaciones_costa.png", as(png) replace
 	graph export "$figout\l_water_vs_explotaciones_costa.png", as(png) replace
 	}
-	**** Figure 4: Distance to Rivers and Plantations
+	**** Figure 4: Log(Distance to Rivers and Plantations)
 }
 di "End of DESCRIPTIVE ANALYSIS"
