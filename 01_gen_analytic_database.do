@@ -14,8 +14,6 @@
 	* Working folder path
 	cd "C:\Users\nicoc\Dropbox\Pre_OneDrive_USFQ\PCNICOLAS_HP_PAVILION\Masters\USFQ\USFQ_EconReview\Author"
 	global texout "C:\Users\nicoc\Dropbox\Apps\Overleaf\BananaPapers\figures"
-	* Temp change to do somenthing
-	di "Hello World :)"
 }
 di "End of SET STATA section!"
 
